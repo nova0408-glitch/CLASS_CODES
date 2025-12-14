@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import Icon from '../shared/Icon';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface Props {
   onStepTraverse?: () => void;
 }
 
 const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const bgColor = isDark ? 'rgba(20, 20, 25, 0.8)' : '#ffffff';
+  const textColor = isDark ? '#e0e0e0' : '#333';
+  const borderColor = isDark ? '#333' : '#ddd';
+  const headerBg = isDark ? 'rgba(30, 30, 40, 0.5)' : '#f8f9fa';
+  const codeBg = isDark ? '#1a1a1f' : 'white';
+  const accentColor = isDark ? '#4a9eff' : '#667eea';
 
   const algorithmSteps = [
     {
@@ -57,10 +67,10 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
 
   return (
     <div style={{
-      background: 'white',
+      background: bgColor,
       padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      borderRadius: '12px',
+      border: `1px solid ${borderColor}`,
       margin: '20px 0'
     }}>
       <div
@@ -75,15 +85,15 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
       >
         <h3 style={{ 
           margin: 0, 
-          color: '#333',
+          color: textColor,
           display: 'flex',
           alignItems: 'center',
           gap: '10px'
         }}>
-          <Icon name="book" size={20} color="#667eea" />
+          <Icon name="book" size={20} color={accentColor} />
           Traversal Guide
         </h3>
-        {isExpanded ? <FiChevronUp size={20} /> : <FiChevronDown size={20} />}
+        {isExpanded ? <FiChevronUp size={20} color={textColor} /> : <FiChevronDown size={20} color={textColor} />}
       </div>
 
       {isExpanded && (
@@ -91,7 +101,7 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
           {/* What is Traversal Section */}
           <section style={{ marginBottom: '25px' }}>
             <h4 style={{ 
-              color: '#667eea', 
+              color: accentColor, 
               marginBottom: '10px',
               display: 'flex',
               alignItems: 'center',
@@ -101,7 +111,7 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
               What is Traversal?
             </h4>
             <p style={{ 
-              color: '#555', 
+              color: isDark ? '#c0c0c0' : '#555', 
               lineHeight: '1.6',
               marginBottom: '10px'
             }}>
@@ -130,7 +140,7 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
           {/* Algorithm Steps */}
           <section style={{ marginBottom: '25px' }}>
             <h4 style={{ 
-              color: '#667eea', 
+              color: accentColor, 
               marginBottom: '15px',
               display: 'flex',
               alignItems: 'center',
@@ -140,10 +150,11 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
               Step-by-Step Traversal Algorithm
             </h4>
             <div style={{
-              background: '#f8f9fa',
+              background: headerBg,
               padding: '15px',
-              borderRadius: '6px',
-              marginBottom: '15px'
+              borderRadius: '8px',
+              marginBottom: '15px',
+              border: `1px solid ${borderColor}`
             }}>
               {algorithmSteps.map((item) => (
                 <div key={item.step} style={{ marginBottom: '15px' }}>
@@ -153,7 +164,7 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
                     gap: '10px'
                   }}>
                     <div style={{
-                      background: '#667eea',
+                      background: accentColor,
                       color: 'white',
                       borderRadius: '50%',
                       width: '24px',
@@ -171,20 +182,21 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
                       <p style={{ 
                         margin: 0, 
                         marginBottom: '5px',
-                        color: '#333'
+                        color: textColor
                       }}>
                         {item.description}
                       </p>
                       {item.code && (
                         <code style={{
                           display: 'block',
-                          background: '#e9ecef',
+                          background: codeBg,
                           padding: '8px',
-                          borderRadius: '4px',
+                          borderRadius: '6px',
                           fontFamily: 'monospace',
                           fontSize: '13px',
-                          color: '#d63384',
-                          marginTop: '5px'
+                          color: isDark ? '#ff88aa' : '#d63384',
+                          marginTop: '5px',
+                          border: `1px solid ${borderColor}`
                         }}>
                           {item.code}
                         </code>
@@ -197,42 +209,44 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
 
             {/* Complete Algorithm */}
             <div style={{
-              background: '#f8f9fa',
+              background: headerBg,
               padding: '15px',
-              borderRadius: '6px',
-              border: '1px solid #dee2e6',
+              borderRadius: '8px',
+              border: `1px solid ${borderColor}`,
               marginBottom: '15px'
             }}>
-              <h5 style={{ margin: '0 0 10px 0', color: '#495057' }}>
+              <h5 style={{ margin: '0 0 10px 0', color: textColor }}>
                 Node Structure Definition (C++):
               </h5>
               <pre style={{
                 margin: '0 0 15px 0',
                 fontFamily: 'monospace',
                 fontSize: '13px',
-                color: '#212529',
-                background: 'white',
+                color: isDark ? '#e0e0e0' : '#212529',
+                background: codeBg,
                 padding: '10px',
-                borderRadius: '4px',
-                overflowX: 'auto'
+                borderRadius: '6px',
+                overflowX: 'auto',
+                border: `1px solid ${borderColor}`
               }}>
 {`struct Node {
     int info;        // Data field
     Node* link;     // Pointer to next node
 };`}
               </pre>
-              <h5 style={{ margin: '0 0 10px 0', color: '#495057' }}>
+              <h5 style={{ margin: '0 0 10px 0', color: textColor }}>
                 Complete C++ Traversal Function:
               </h5>
               <pre style={{
                 margin: 0,
                 fontFamily: 'monospace',
                 fontSize: '13px',
-                color: '#212529',
-                background: 'white',
+                color: isDark ? '#e0e0e0' : '#212529',
+                background: codeBg,
                 padding: '10px',
-                borderRadius: '4px',
-                overflowX: 'auto'
+                borderRadius: '6px',
+                overflowX: 'auto',
+                border: `1px solid ${borderColor}`
               }}>
 {`void traverseList(Node* head) {
     Node* current = head;  // Pointer to traverse the list
@@ -252,7 +266,7 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
           {/* Common Patterns */}
           <section style={{ marginBottom: '25px' }}>
             <h4 style={{ 
-              color: '#667eea', 
+              color: accentColor, 
               marginBottom: '15px',
               display: 'flex',
               alignItems: 'center',
@@ -266,30 +280,30 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
                 <div 
                   key={idx}
                   style={{
-                    background: '#f8f9fa',
+                    background: headerBg,
                     padding: '12px',
-                    borderRadius: '6px',
+                    borderRadius: '8px',
                     marginBottom: '10px',
-                    border: '1px solid #dee2e6'
+                    border: `1px solid ${borderColor}`
                   }}
                 >
                   <h5 style={{ 
                     margin: '0 0 8px 0', 
-                    color: '#495057',
+                    color: textColor,
                     fontSize: '14px'
                   }}>
                     {pattern.name}
                   </h5>
                   <p style={{ 
                     margin: '0 0 5px 0', 
-                    color: '#6c757d',
+                    color: isDark ? '#b0b0b0' : '#6c757d',
                     fontSize: '13px'
                   }}>
                     {pattern.description}
                   </p>
                   <p style={{ 
                     margin: 0, 
-                    color: '#868e96',
+                    color: isDark ? '#999' : '#868e96',
                     fontSize: '12px',
                     fontStyle: 'italic'
                   }}>
@@ -303,7 +317,7 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
           {/* Key Points */}
           <section>
             <h4 style={{ 
-              color: '#667eea', 
+              color: accentColor, 
               marginBottom: '15px',
               display: 'flex',
               alignItems: 'center',
@@ -315,7 +329,7 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
             <ul style={{ 
               margin: 0, 
               paddingLeft: '20px',
-              color: '#555',
+              color: isDark ? '#c0c0c0' : '#555',
               lineHeight: '1.8'
             }}>
               <li>Always check if the list is empty (head == nullptr) before traversing</li>
@@ -335,15 +349,15 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
             <div style={{
               marginTop: '20px',
               padding: '15px',
-              background: '#E3F2FD',
-              borderRadius: '6px',
-              border: '1px solid #2196F3'
+              background: isDark ? 'rgba(74, 158, 255, 0.15)' : '#E3F2FD',
+              borderRadius: '8px',
+              border: `1px solid ${isDark ? 'rgba(74, 158, 255, 0.4)' : '#2196F3'}`
             }}>
               <button
                 onClick={onStepTraverse}
                 style={{
                   padding: '10px 20px',
-                  background: '#2196F3',
+                  background: isDark ? 'rgba(74, 158, 255, 0.3)' : '#2196F3',
                   color: 'white',
                   border: 'none',
                   borderRadius: '6px',
@@ -351,7 +365,14 @@ const TraversalGuide: React.FC<Props> = ({ onStepTraverse }) => {
                   fontWeight: 'bold',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px'
+                  gap: '8px',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = isDark ? 'rgba(74, 158, 255, 0.4)' : '#1976D2';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = isDark ? 'rgba(74, 158, 255, 0.3)' : '#2196F3';
                 }}
               >
                 <Icon name="play" size={16} />

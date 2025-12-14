@@ -1,4 +1,4 @@
-import { ListNode, PointerVariable, ExecutionState } from '../types';
+import { ListNode, ExecutionState } from '../types';
 
 // Generate unique IDs for nodes
 let nodeIdCounter = 0;
@@ -249,7 +249,7 @@ export function executeStatement(
     if (setHeadMatch) {
       const varName = setHeadMatch[1];
       const ptr = newState.pointers.get(varName);
-      newState.head = getActualNode(ptr, allNodes);
+      newState.head = getActualNode(ptr || null, allNodes);
       explanation = `Head pointer (Node*) now points to the node struct referenced by ${varName}.`;
       return { newState, explanation };
     }

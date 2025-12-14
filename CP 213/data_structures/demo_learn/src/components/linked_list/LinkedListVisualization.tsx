@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { ListNode, ExecutionState } from '../../structures/linear/linked_list/types';
 import { FiAlertTriangle } from 'react-icons/fi';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface Props {
   state: ExecutionState;
@@ -12,11 +13,13 @@ const NODE_WIDTH = 120;
 const NODE_HEIGHT = 60;
 const INFO_WIDTH = 60;
 const LINK_WIDTH = 60;
-const ARROW_LENGTH = 80;
 const VERTICAL_SPACING = 100;
 const HORIZONTAL_SPACING = 150;
 
 const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColors }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   // Calculate node positions
   const nodePositions = useMemo(() => {
     const positions = new Map<string, { x: number; y: number }>();
@@ -40,7 +43,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
     // Add lost nodes below
     let lostY = y + VERTICAL_SPACING + 50;
     let lostX = 100;
-    for (const [id, node] of allNodes) {
+    for (const [id] of allNodes) {
       if (state.lostNodes.has(id) && !positions.has(id)) {
         positions.set(id, { x: lostX, y: lostY });
         lostX += HORIZONTAL_SPACING;
@@ -76,16 +79,29 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
   }, [allNodes, state.lostNodes]);
 
   const getNodeColor = (node: ListNode): string => {
-    if (node.isLost) return '#888';
-    if (node.isCurrent) return '#ffd700';
-    if (node.isHighlighted) return '#90EE90';
-    return '#4A90E2';
+    if (isDark) {
+      if (node.isLost) return '#444';
+      if (node.isCurrent) return '#4a7cff';
+      if (node.isHighlighted) return '#00cc88';
+      return '#2d4a7a';
+    } else {
+      if (node.isLost) return '#888';
+      if (node.isCurrent) return '#ffd700';
+      if (node.isHighlighted) return '#90EE90';
+      return '#4A90E2';
+    }
   };
 
   const getNodeStroke = (node: ListNode): string => {
-    if (node.isLost) return '#555';
-    if (node.isCurrent) return '#FF8C00';
-    return '#2E5C8A';
+    if (isDark) {
+      if (node.isLost) return '#222';
+      if (node.isCurrent) return '#6a9cff';
+      return '#4a6a9a';
+    } else {
+      if (node.isLost) return '#555';
+      if (node.isCurrent) return '#FF8C00';
+      return '#2E5C8A';
+    }
   };
 
   const renderNode = (node: ListNode, pos: { x: number; y: number }) => {
@@ -130,7 +146,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
           textAnchor="middle"
           fontSize="14"
           fontWeight="bold"
-          fill="#000"
+          fill={isDark ? "#e0e0e0" : "#000"}
         >
           {node.info !== null ? node.info : 'NULL'}
         </text>
@@ -139,7 +155,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
           y={pos.y - 5}
           textAnchor="middle"
           fontSize="10"
-          fill="#666"
+          fill={isDark ? "#aaa" : "#666"}
         >
           info
         </text>
@@ -157,7 +173,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
           y={pos.y - 5}
           textAnchor="middle"
           fontSize="10"
-          fill="#666"
+          fill={isDark ? "#aaa" : "#666"}
         >
           link
         </text>
@@ -168,7 +184,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
             y={pos.y + NODE_HEIGHT / 2 + 5}
             textAnchor="middle"
             fontSize="10"
-            fill="#000"
+            fill={isDark ? "#e0e0e0" : "#000"}
           >
             →
           </text>
@@ -178,7 +194,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
             y={pos.y + NODE_HEIGHT / 2 + 5}
             textAnchor="middle"
             fontSize="12"
-            fill="#FF0000"
+            fill="#FF6B6B"
             fontWeight="bold"
           >
             NULL
@@ -190,7 +206,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
           y={pos.y + NODE_HEIGHT + 15}
           textAnchor="middle"
           fontSize="9"
-          fill="#666"
+          fill={isDark ? "#666" : "#666"}
         >
           {node.id}
         </text>
@@ -229,9 +245,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
     // Straight arrow
     const dx = endX - startX;
     const dy = endY - startY;
-    const length = Math.sqrt(dx * dx + dy * dy);
     const arrowLength = 10;
-    const arrowWidth = 6;
 
     const angle = Math.atan2(dy, dx);
     const arrowX = endX - arrowLength * Math.cos(angle);
@@ -244,7 +258,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
           y1={startY}
           x2={arrowX}
           y2={arrowY}
-          stroke="#000"
+          stroke={isDark ? "#e0e0e0" : "#000"}
           strokeWidth={2}
           markerEnd="url(#arrowhead)"
         />
@@ -357,12 +371,26 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
     return arrows;
   };
 
+  const containerBg = isDark ? 'rgba(20, 20, 25, 0.6)' : '#f5f5f5';
+  const svgBg = isDark ? '#1a1a1f' : 'white';
+  const borderColor = isDark ? '#333' : '#ddd';
+
   return (
-    <div style={{ padding: '20px', background: '#f5f5f5', borderRadius: '8px', margin: '20px 0' }}>
+    <div style={{ 
+      padding: '20px', 
+      background: containerBg, 
+      borderRadius: '12px', 
+      margin: '20px 0',
+      border: `1px solid ${borderColor}`
+    }}>
       <svg
         width="100%"
         height={lostNodes.length > 0 ? 400 : 300}
-        style={{ border: '1px solid #ddd', background: 'white', borderRadius: '4px' }}
+        style={{ 
+          border: `1px solid ${borderColor}`, 
+          background: svgBg, 
+          borderRadius: '8px' 
+        }}
       >
         <defs>
           <marker
@@ -373,7 +401,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
             refY="3"
             orient="auto"
           >
-            <polygon points="0 0, 10 3, 0 6" fill="#000" />
+            <polygon points="0 0, 10 3, 0 6" fill={isDark ? "#e0e0e0" : "#000"} />
           </marker>
           <marker
             id="arrowhead-red"
@@ -408,7 +436,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
                 y={pos.y - 20}
                 textAnchor="middle"
                 fontSize="12"
-                fill="#FF0000"
+                fill="#FF6B6B"
                 fontWeight="bold"
               >
                 Lost / Unreachable
@@ -433,7 +461,7 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
               x={100}
               y={150}
               fontSize="16"
-              fill="#FF0000"
+              fill={isDark ? "#FF6B6B" : "#FF0000"}
               fontWeight="bold"
             >
               NULL (Empty List)
@@ -448,15 +476,15 @@ const LinkedListVisualization: React.FC<Props> = ({ state, allNodes, pointerColo
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: '#FFE5E5',
+              background: isDark ? 'rgba(255, 100, 100, 0.2)' : '#FFE5E5',
               padding: '8px 12px',
               borderRadius: '4px',
-              border: '2px solid #FF0000'
+              border: `2px solid ${isDark ? '#FF6B6B' : '#FF0000'}`
             }}>
-              <FiAlertTriangle size={20} color="#FF0000" />
+              <FiAlertTriangle size={20} color={isDark ? "#FF6B6B" : "#FF0000"} />
               <span style={{
                 fontSize: '14px',
-                color: '#FF0000',
+                color: isDark ? '#FF6B6B' : '#FF0000',
                 fontWeight: 'bold'
               }}>
                 LOOP DETECTED - Infinite traversal possible!

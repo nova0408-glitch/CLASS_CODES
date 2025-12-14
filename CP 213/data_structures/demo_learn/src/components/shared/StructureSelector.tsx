@@ -1,6 +1,5 @@
 import React from 'react';
 import { DataStructure } from '../../structures/base/StructureInterface';
-import { StructureCategory } from '../../structures/base/types';
 
 interface Props {
   structures: DataStructure[];

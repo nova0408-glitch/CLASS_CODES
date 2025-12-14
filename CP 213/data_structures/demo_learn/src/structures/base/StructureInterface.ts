@@ -1,5 +1,4 @@
 import { StructureCategory, Operation, GuideContent } from './types';
-import { ReactNode } from 'react';
 
 // Base interface that all data structures must implement
 export interface DataStructure {

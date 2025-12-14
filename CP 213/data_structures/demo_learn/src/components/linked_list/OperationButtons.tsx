@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Icon from '../shared/Icon';
 import { FiCode, FiX } from 'react-icons/fi';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useFont } from '../../contexts/FontContext';
 
 interface Props {
   onCreateList: () => void;
@@ -155,12 +157,26 @@ const OperationButtons: React.FC<Props> = ({
   onShowCode,
   disabled = false
 }) => {
+  const { theme } = useTheme();
+  const { uiFont, codeFont } = useFont();
+  const isDark = theme === 'dark';
   const [showCodePanel, setShowCodePanel] = useState<string | null>(null);
+
+  const bgColor = isDark 
+    ? 'rgba(20, 20, 30, 0.7)' 
+    : 'rgba(255, 255, 255, 0.25)';
+  const textColor = isDark ? '#e0e0e0' : '#333';
+  const buttonBg = disabled 
+    ? (isDark ? 'rgba(60, 60, 70, 0.5)' : '#ccc')
+    : (isDark ? 'rgba(74, 158, 255, 0.3)' : '#667eea');
+  const errorButtonBg = disabled
+    ? (isDark ? 'rgba(60, 60, 70, 0.5)' : '#ccc')
+    : (isDark ? 'rgba(255, 100, 100, 0.3)' : '#e74c3c');
 
   const buttonStyle = {
     padding: '10px 15px',
     margin: '5px',
-    background: disabled ? '#ccc' : '#667eea',
+    background: buttonBg,
     color: 'white',
     border: 'none',
     borderRadius: '6px',
@@ -189,17 +205,20 @@ const OperationButtons: React.FC<Props> = ({
 
   return (
     <div style={{
-      background: 'white',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      margin: '20px 0'
+      background: bgColor,
+      backdropFilter: 'blur(20px) saturate(180%)',
+      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+      padding: '25px',
+      borderRadius: '16px',
+      border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.3)'}`,
+      margin: '20px 0',
+      boxShadow: isDark ? '0 8px 32px 0 rgba(0, 0, 0, 0.3)' : '0 8px 32px 0 rgba(0, 0, 0, 0.1)'
     }}>
-      <h3 style={{ marginBottom: '15px', color: '#333', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <Icon name="list" size={20} color="#667eea" />
+      <h3 style={{ marginBottom: '15px', color: textColor, display: 'flex', alignItems: 'center', gap: '8px', fontFamily: uiFont }}>
+        <Icon name="list" size={20} color={isDark ? '#4a9eff' : '#667eea'} />
         Quick Operations
       </h3>
-      <p style={{ fontSize: '12px', color: '#666', marginBottom: '15px', fontStyle: 'italic' }}>
+      <p style={{ fontSize: '12px', color: isDark ? '#aaa' : '#666', marginBottom: '15px', fontStyle: 'italic', fontFamily: uiFont }}>
         Click any operation to see the C++ code that executes, then observe the effect on the visualization.
       </p>
       
@@ -263,7 +282,7 @@ const OperationButtons: React.FC<Props> = ({
         <button 
           onClick={() => handleOperation('demonstrateWrong', onDemonstrateWrong)} 
           disabled={disabled} 
-          style={{...buttonStyle, background: disabled ? '#ccc' : '#e74c3c'}}
+          style={{...buttonStyle, background: errorButtonBg}}
         >
           <Icon name="code" size={14} />
           Demonstrate Wrong Order
@@ -273,10 +292,10 @@ const OperationButtons: React.FC<Props> = ({
       {showCodePanel && operationCodes[showCodePanel] && (
         <div style={{
           marginTop: '15px',
-          background: '#f8f9fa',
+          background: isDark ? 'rgba(30, 30, 40, 0.8)' : '#f8f9fa',
           padding: '15px',
-          borderRadius: '6px',
-          border: '2px solid #667eea',
+          borderRadius: '8px',
+          border: `2px solid ${isDark ? 'rgba(74, 158, 255, 0.4)' : '#667eea'}`,
           position: 'relative'
         }}>
           <button
@@ -289,13 +308,13 @@ const OperationButtons: React.FC<Props> = ({
               border: 'none',
               cursor: 'pointer',
               fontSize: '18px',
-              color: '#666'
+              color: isDark ? '#aaa' : '#666'
             }}
           >
             <FiX />
           </button>
           <h4 style={{ 
-            color: '#667eea', 
+            color: isDark ? '#4a9eff' : '#667eea', 
             marginBottom: '8px',
             display: 'flex',
             alignItems: 'center',
@@ -304,19 +323,20 @@ const OperationButtons: React.FC<Props> = ({
             <FiCode size={16} />
             {operationCodes[showCodePanel].name} - C++ Code
           </h4>
-          <p style={{ color: '#666', fontSize: '13px', marginBottom: '10px' }}>
+          <p style={{ color: isDark ? '#c0c0c0' : '#666', fontSize: '13px', marginBottom: '10px' }}>
             {operationCodes[showCodePanel].description}
           </p>
           <pre style={{
             margin: 0,
-            fontFamily: 'monospace',
-            fontSize: '12px',
-            color: '#212529',
-            background: 'white',
-            padding: '12px',
-            borderRadius: '4px',
+            fontFamily: codeFont,
+            fontSize: '13px',
+            color: isDark ? '#e0e0e0' : '#212529',
+            background: isDark ? '#1a1a1f' : 'white',
+            padding: '15px',
+            borderRadius: '8px',
             overflowX: 'auto',
-            border: '1px solid #dee2e6'
+            border: `1px solid ${isDark ? '#333' : '#dee2e6'}`,
+            lineHeight: '1.6'
           }}>
             {operationCodes[showCodePanel].code}
           </pre>

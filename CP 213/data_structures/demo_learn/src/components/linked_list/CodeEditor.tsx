@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Icon from '../shared/Icon';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useFont } from '../../contexts/FontContext';
 
 interface Props {
   onExecute: (statement: string) => void;
@@ -8,9 +10,30 @@ interface Props {
   disabled?: boolean;
 }
 
-const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], disabled = false }) => {
+const CodeEditor: React.FC<Props> = ({ onExecute, onClear, disabled = false }) => {
+  const { theme } = useTheme();
+  const { uiFont, codeFont } = useFont();
+  const isDark = theme === 'dark';
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
+
+  const bgColor = isDark 
+    ? 'rgba(20, 20, 30, 0.7)' 
+    : 'rgba(255, 255, 255, 0.25)';
+  const textColor = isDark ? '#e0e0e0' : '#333';
+  const borderColor = isDark ? '#333' : '#ddd';
+  const inputBg = isDark ? '#1a1a1f' : '#ffffff';
+  const inputBorder = isDark ? '#444' : '#ddd';
+  const infoBg = isDark ? 'rgba(74, 158, 255, 0.15)' : '#E3F2FD';
+  const infoText = isDark ? '#4a9eff' : '#1976D2';
+  const buttonBg = disabled 
+    ? (isDark ? 'rgba(60, 60, 70, 0.5)' : '#ccc')
+    : (isDark ? 'rgba(74, 158, 255, 0.3)' : '#4A90E2');
+  const clearButtonBg = disabled
+    ? (isDark ? 'rgba(60, 60, 70, 0.5)' : '#ccc')
+    : (isDark ? 'rgba(255, 100, 100, 0.3)' : '#e74c3c');
+  const suggestionBg = isDark ? 'rgba(30, 30, 40, 0.8)' : '#f8f9fa';
+  const historyBg = isDark ? 'rgba(30, 30, 40, 0.8)' : '#f8f9fa';
 
   const commonStatements = [
     'p = head',
@@ -39,26 +62,30 @@ const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], dis
 
   return (
     <div style={{ 
-      background: 'white', 
-      padding: '20px', 
-      borderRadius: '8px', 
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      margin: '20px 0'
+      background: bgColor,
+      backdropFilter: 'blur(20px) saturate(180%)',
+      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+      padding: '25px', 
+      borderRadius: '16px',
+      border: `1px solid ${borderColor}`,
+      margin: '20px 0',
+      boxShadow: isDark ? '0 8px 32px 0 rgba(0, 0, 0, 0.3)' : '0 8px 32px 0 rgba(0, 0, 0, 0.1)'
     }}>
-      <h3 style={{ marginBottom: '15px', color: '#333', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <Icon name="code" size={20} color="#667eea" />
+      <h3 style={{ marginBottom: '15px', color: textColor, display: 'flex', alignItems: 'center', gap: '8px', fontFamily: uiFont }}>
+        <Icon name="code" size={20} color={isDark ? '#4a9eff' : '#667eea'} />
         C++ Code Editor (Struct & Pointers)
       </h3>
       
       <div style={{ 
-        background: '#E3F2FD', 
+        background: infoBg, 
         padding: '10px', 
-        borderRadius: '6px', 
+        borderRadius: '8px', 
         marginBottom: '15px',
         fontSize: '12px',
-        color: '#1976D2'
+        color: infoText,
+        border: `1px solid ${isDark ? 'rgba(74, 158, 255, 0.3)' : '#2196F3'}`
       }}>
-        <strong>Node Structure:</strong> <code style={{fontFamily: 'monospace'}}>struct Node {'{'} int info; Node* link; {'}'};</code>
+        <strong>Node Structure:</strong> <code style={{fontFamily: 'monospace', color: infoText}}>struct Node {'{'} int info; Node* link; {'}'};</code>
       </div>
       
       <form onSubmit={handleSubmit}>
@@ -70,11 +97,13 @@ const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], dis
             placeholder="Enter C++ statement (e.g., p = head->link)"
             style={{
               flex: 1,
-              padding: '10px',
+              padding: '12px',
               fontSize: '14px',
-              border: '2px solid #ddd',
-              borderRadius: '4px',
-              fontFamily: 'monospace'
+              border: `2px solid ${inputBorder}`,
+              borderRadius: '8px',
+              fontFamily: codeFont,
+              background: inputBg,
+              color: textColor
             }}
             disabled={disabled}
           />
@@ -83,10 +112,10 @@ const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], dis
             disabled={disabled || !input.trim()}
             style={{
               padding: '10px 20px',
-              background: disabled ? '#ccc' : '#4A90E2',
+              background: buttonBg,
               color: 'white',
               border: 'none',
-              borderRadius: '4px',
+              borderRadius: '6px',
               cursor: disabled ? 'not-allowed' : 'pointer',
               fontWeight: 'bold',
               display: 'flex',
@@ -103,10 +132,10 @@ const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], dis
             disabled={disabled}
             style={{
               padding: '10px 20px',
-              background: disabled ? '#ccc' : '#e74c3c',
+              background: clearButtonBg,
               color: 'white',
               border: 'none',
-              borderRadius: '4px',
+              borderRadius: '6px',
               cursor: disabled ? 'not-allowed' : 'pointer',
               fontWeight: 'bold'
             }}
@@ -118,7 +147,7 @@ const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], dis
 
       {commonStatements.length > 0 && (
         <div style={{ marginBottom: '15px' }}>
-          <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
+          <div style={{ fontSize: '12px', color: isDark ? '#aaa' : '#666', marginBottom: '8px' }}>
             Quick statements:
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -129,12 +158,15 @@ const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], dis
                 disabled={disabled}
                 style={{
                   padding: '6px 12px',
-                  background: disabled ? '#f0f0f0' : '#f8f9fa',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
+                  background: disabled 
+                    ? (isDark ? 'rgba(60, 60, 70, 0.5)' : '#f0f0f0')
+                    : suggestionBg,
+                  border: `1px solid ${borderColor}`,
+                  borderRadius: '6px',
                   cursor: disabled ? 'not-allowed' : 'pointer',
                   fontSize: '12px',
-                  fontFamily: 'monospace'
+                  fontFamily: 'monospace',
+                  color: textColor
                 }}
               >
                 {stmt}
@@ -146,20 +178,21 @@ const CodeEditor: React.FC<Props> = ({ onExecute, onClear, suggestions = [], dis
 
       {history.length > 0 && (
         <div>
-          <div style={{ fontSize: '12px', color: '#666', marginBottom: '8px' }}>
+          <div style={{ fontSize: '12px', color: isDark ? '#aaa' : '#666', marginBottom: '8px' }}>
             Execution history:
           </div>
           <div style={{ 
             maxHeight: '150px', 
             overflowY: 'auto',
-            background: '#f8f9fa',
+            background: historyBg,
             padding: '10px',
-            borderRadius: '4px',
+            borderRadius: '6px',
             fontFamily: 'monospace',
-            fontSize: '12px'
+            fontSize: '12px',
+            border: `1px solid ${borderColor}`
           }}>
             {history.slice(-10).reverse().map((stmt, idx) => (
-              <div key={idx} style={{ marginBottom: '4px', color: '#555' }}>
+              <div key={idx} style={{ marginBottom: '4px', color: isDark ? '#c0c0c0' : '#555' }}>
                 {history.length - idx}. {stmt}
               </div>
             ))}
