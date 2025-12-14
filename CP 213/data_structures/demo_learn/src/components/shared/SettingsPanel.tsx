@@ -22,8 +22,8 @@ const SettingsPanel: React.FC = () => {
   return (
     <div style={{
       position: 'fixed',
-      top: '20px',
-      right: '20px',
+      bottom: '20px',
+      left: '20px',
       zIndex: 1000
     }}>
       <button
@@ -61,8 +61,8 @@ const SettingsPanel: React.FC = () => {
       {isOpen && (
         <div style={{
           position: 'absolute',
-          top: '50px',
-          right: 0,
+          bottom: '50px',
+          left: 0,
           background: bgColor,
           backdropFilter: 'blur(30px) saturate(200%)',
           WebkitBackdropFilter: 'blur(30px) saturate(200%)',

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { DataStructure } from '../../base/StructureInterface';
 import { GuideContent } from '../../base/types';
 import LinkedListVisualization from '../../../components/linked_list/LinkedListVisualization';

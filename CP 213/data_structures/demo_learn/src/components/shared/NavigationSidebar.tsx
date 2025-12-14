@@ -3,8 +3,6 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useFont } from '../../contexts/FontContext';
 import { 
   FiBook, 
-  FiCode, 
-  FiTarget, 
   FiTrendingUp, 
   FiRefreshCw,
   FiInfo,
@@ -13,8 +11,7 @@ import {
   FiMenu,
   FiX,
   FiHome,
-  FiZap,
-  FiBarChart2
+  FiZap
 } from 'react-icons/fi';
 
 interface NavigationItem {
