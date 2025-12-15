@@ -61,4 +61,5 @@ coverage
 *.ilk
 *.obj
 *.pdb
+*.class
 
