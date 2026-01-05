@@ -18,7 +18,7 @@ public class QuestionFour {
         System.out.printf("Difference: %d\n", (first_number - second_number));
         System.out.printf("Quotient: %d\n", (first_number / second_number));
         
-        
+        input.close();
     }
     
 }
