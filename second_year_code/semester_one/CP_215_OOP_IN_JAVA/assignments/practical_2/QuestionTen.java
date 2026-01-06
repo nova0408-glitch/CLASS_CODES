@@ -13,7 +13,7 @@ public class QuestionTen {
         System.out.println("ENTER THE COSTS FOR THE FOLLOWING: ");
         System.out.println("====================================");
         System.out.print("Total miles driven per day: \n");
-        total_miles = input.nextDouble();
+        total_miles = input.nextDouble(); 
 
         System.out.print("Cost per gallon of gasoline: \n");
         cost_gallon = input.nextDouble();
@@ -25,15 +25,19 @@ public class QuestionTen {
         parking_fees = input.nextDouble();
 
         System.out.print("Tolls per day: \n");
-        tolls = input.nextDouble();
-
-        
+        tolls = input.nextDouble();        
 
         double cost_mile = ((total_miles) / average_miles_gallon) * cost_gallon;
 
         driving_costs = cost_mile + parking_fees + tolls;
 
         double driving_costs_month = 30 * driving_costs;
+        
+        System.out.println("========================================");
+        System.out.println("USER COST PER DAY:" + driving_costs_month);
+
+        input.close();
+        // Please cross-check the code
         
     }
     
