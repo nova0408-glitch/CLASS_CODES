@@ -1,4 +1,4 @@
-package assignments.practical_6;
+package assignments.practical_6.QuestionTwo;
 
 class Date {
 
@@ -7,15 +7,49 @@ class Date {
     private int month;
 
     public Date(int day, int month, int year) {
-        this.year = year;
-        this.day = day;
-        this.month = month;
+        boolean isLeapYear;
+
+        // Start by checking if it is a leap year
+        // COndition for leap year 
+        // And should not be divisible by 100
+        // Divisble by four our by 400 (special case for centuries)
+
+        if ((year%4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            isLeapYear = true;
+        }
+        else {
+            isLeapYear = false;
+        }
+
+        if (month < 1 || month > 12) {
+            System.out.println("Invalid Month");
+            return;
+        }
+
+        // days in each of the 12 Months
+        int [] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        if (month == 2 && isLeapYear){
+            daysInMonth[1] = 29;
+
+        }
+
+        // CHecker to see if the days fall in the range 
+        // Logic is if April is 4, then 4-1 will be  3
+        // Arrays use indexes!
+
+        if (day >= 1 && day <= daysInMonth[month - 1]) {
+            this.year = year;
+            this.day = day;
+            this.month = month;
+        }
+
+
     }
 
     public String toString(){
         String date;
-        date  = Integer.toString(this.day) + " - "+  Integer.toString(this.month) + " - " +  Integer.toString(this.year);
-        
+        date  = Integer.toString(this.day) + " - "+  Integer.toString(this.month) + " - " +  Integer.toString(this.year);     
         
         return date;
     }

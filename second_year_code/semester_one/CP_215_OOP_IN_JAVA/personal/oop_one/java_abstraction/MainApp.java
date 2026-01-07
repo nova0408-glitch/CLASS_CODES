@@ -1,6 +1,14 @@
 package personal.oop_one.java_abstraction;
 abstract class MotorBike {
+
+    public MotorBike() {
+        
+
+    }
+
     abstract void brake();
+
+
 }
 
 class SportsBike extends MotorBike {
