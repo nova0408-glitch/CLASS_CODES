@@ -3,7 +3,7 @@ import java.util.List;
 // uses-a relationship 
 
 
-// Course class
+// Course class        
 class Course {
     String courseCode;
     String courseTitle;

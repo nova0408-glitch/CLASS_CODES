@@ -1,0 +1,8 @@
+JAVA TEST 1
+
+General Concepts of OOP
+Encapsulation
+Inheritance and Composition
+Polymorphism 
+Abstract Classes / Abstraction 
+Interface
