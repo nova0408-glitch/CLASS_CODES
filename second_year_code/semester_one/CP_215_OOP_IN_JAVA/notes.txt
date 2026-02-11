@@ -1,0 +1,9 @@
+if a class extends abstract class, but fails to implement the abstract methods. the class is also an abstract class
+
+an interface, can contain default method, called default.
+
+checked and unchecked exceptions in Java
+
+one shta t will allow you to compile but will be deteted at run time
+
+what type sor exapmples like out of bound

@@ -1,4 +1,5 @@
 package CLASS_LAB;
+
 abstract class Animal {
 
     int age;
@@ -12,6 +13,10 @@ abstract class Animal {
 interface Flyable {
     public void fly(int altitude);
     public void land();
+
+    default void flying() {
+        System.out.println("The animal is Flying in the Air.");
+    }
 }
 
 interface Swimmable {
@@ -45,7 +50,7 @@ class Fish extends Animal implements Swimmable {
 
     @Override
     public void swim(double depth) {
-        System.out.printf("The fish is %d m deep.\n", depth);
+        System.out.printf("The fish is %.2f m deep.\n", depth);
     }
 }
 
@@ -89,17 +94,22 @@ public class MainRun {
         if (bird instanceof Bird) {
             Bird bird_obj = (Bird) bird;
             bird_obj.fly(100);
+            System.out.print("Default Method Implementation: ");
+            bird_obj.flying();
         }
 
-        if (bird instanceof Fish) {
-            Fish fish_obj = (Fish) fish;
-            fish_obj.swim(5.0);
+        // Another way of downcasting:
+        if (bird instanceof Flyable) {
+            ((Flyable) bird).fly(100);
         }
 
-        if (bat instanceof Bat) {
-            Bat bat_obj = (Bat) bat;
-            bat_obj.fly(100);
-            bat_obj.swim(5.0);
+        if (fish instanceof Swimmable) {
+            ((Swimmable) fish).swim(5.0);
+        }
+
+        if (bat instanceof Flyable && bat instanceof Swimmable) {
+            ((Flyable) bat).fly(100);
+            ((Swimmable) bat).swim(5.0);
         }
 
         /* Downcasting the following leads to an error:
@@ -107,13 +117,12 @@ public class MainRun {
         fish_obj.fly(100);
 
         Message:
-        Exception in thread "main" java.lang.ClassCastException: class CLASS_LAB.Fish 
-        cannot be cast to class CLASS_LAB.Bird (CLASS_LAB.Fish and CLASS_LAB.Bird are 
+        Exception in thread "main" java.lang.ClassCastException: class CLASS_LAB.Fish
+        cannot be cast to class CLASS_LAB.Bird (CLASS_LAB.Fish and CLASS_LAB.Bird are
         in unnamed module of loader 'app') at CLASS_LAB.MainRun.main(MainRun.java:105)
-        
-        
-        
+
+
+
         */
-        
     }
 }
