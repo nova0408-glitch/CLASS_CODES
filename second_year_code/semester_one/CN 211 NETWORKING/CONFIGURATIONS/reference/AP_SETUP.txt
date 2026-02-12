@@ -1,0 +1,20 @@
+ACCESS POINT SETUP (ALL SITES)
+1) Physical
+   - AP connected to router Fa0/0/0 (integrated switchport)
+
+2) AP Config
+   - SSID: choose site name (e.g., UDOM_WIFI, BUNGE_WIFI)
+   - Security:
+     - For testing/demo: Open
+     - For presentation quality: WPA2-PSK with passphrase
+   - IP configuration: DHCP (AP gets management IP automatically)
+
+3) Why this design
+   - Router Fa0/0/0 is Layer-2 and belongs to VLAN 1.
+   - Router interface Vlan1 is configured as wireless gateway (10.x.3.1).
+   - DHCP pool for WIFI gives clients IP, gateway, DNS automatically.
+
+4) Verification
+   - Laptop connects to SSID
+   - Laptop gets 10.x.3.x address
+   - Laptop can ping local gateway (10.x.3.1) and remote web servers (10.y.2.2)

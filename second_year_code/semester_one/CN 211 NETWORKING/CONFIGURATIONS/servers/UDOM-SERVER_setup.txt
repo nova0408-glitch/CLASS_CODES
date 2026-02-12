@@ -1,0 +1,17 @@
+UDOM SERVER SETUP (Server-PT)
+1) Desktop > IP Configuration (Static)
+   IPv4: 10.1.2.2
+   Mask: 255.255.255.0
+   Gateway: 10.1.2.1
+   DNS: 127.0.0.1
+
+2) Services > DNS = On
+   A records:
+   www.udom.ac.tz    10.1.2.2
+   www.bunge.gov.tz  10.2.2.2
+   www.mipango.ac.tz 10.3.2.2
+   www.cbe.ac.tz     10.4.2.2
+
+3) Services > HTTP = On
+   index.html:
+   <html><head><title>University of Dodoma</title></head><body><h1>University of Dodoma</h1><p>www.udom.ac.tz</p></body></html>

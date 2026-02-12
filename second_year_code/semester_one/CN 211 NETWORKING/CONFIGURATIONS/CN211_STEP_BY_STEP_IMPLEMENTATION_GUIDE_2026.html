@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CN211 Step-by-Step Implementation Guide</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 26px; line-height: 1.35; color: #111; }
+h1, h2, h3 { margin: 0.5em 0 0.25em; }
+h1 { font-size: 22px; }
+h2 { font-size: 17px; border-bottom: 1px solid #777; padding-bottom: 3px; }
+h3 { font-size: 14px; }
+table { border-collapse: collapse; width: 100%; margin: 8px 0 12px; font-size: 12px; }
+th, td { border: 1px solid #666; padding: 6px; vertical-align: top; }
+pre { font-family: "Courier New", monospace; font-size: 11px; border: 1px solid #aaa; padding: 8px; white-space: pre-wrap; }
+code { font-family: "Courier New", monospace; font-size: 11px; }
+.note { background: #f4fff8; border-left: 4px solid #2a6; padding: 8px; margin: 8px 0; }
+.warn { background: #fff8f3; border-left: 4px solid #d2691e; padding: 8px; margin: 8px 0; }
+.pagebreak { page-break-before: always; }
+.small { font-size: 11px; }
+</style>
+</head>
+<body>
+
+<h1>CN 211 Step-by-Step Implementation Guide (Team Edition)</h1>
+<p><b>Target:</b> Any teammate should be able to build, configure, test, and present the full solution from scratch in Packet Tracer.</p>
+<p><b>Submission alignment:</b> Built to satisfy assignment requirements for DNS, WEB, DHCP, wireless, router configuration, and inter-site web accessibility.</p>
+
+<h2>0) What You Will Build</h2>
+<table>
+<tr><th>Site</th><th>Router</th><th>Users LAN</th><th>Server LAN</th><th>WiFi LAN</th><th>Server IP</th></tr>
+<tr><td>UDOM</td><td>Cisco 2911 + HWIC-2T</td><td>10.1.1.0/24</td><td>10.1.2.0/24</td><td>10.1.3.0/24</td><td>10.1.2.2</td></tr>
+<tr><td>BUNGE</td><td>Cisco 2911 + HWIC-2T</td><td>10.2.1.0/24</td><td>10.2.2.0/24</td><td>10.2.3.0/24</td><td>10.2.2.2</td></tr>
+<tr><td>MIPANGO</td><td>Cisco 2911 + HWIC-2T</td><td>10.3.1.0/24</td><td>10.3.2.0/24</td><td>10.3.3.0/24</td><td>10.3.2.2</td></tr>
+<tr><td>CBE</td><td>Cisco 2911 + HWIC-2T</td><td>10.4.1.0/24</td><td>10.4.2.0/24</td><td>10.4.3.0/24</td><td>10.4.2.2</td></tr>
+<tr><td>WAN</td><td>Cloud-PT Frame Relay</td><td colspan="4">10.10.10.0/24 on router serial links</td></tr>
+</table>
+
+<div class="note"><b>Why this IP plan:</b> Each site gets a clean block (10.site.subnet.0/24), making troubleshooting and presentation explanations simple and non-overlapping.</div>
+
+<h2>1) Place Devices in Packet Tracer</h2>
+<h3>1.1 Add devices per site</h3>
+<p>For each of the 4 sites, place:</p>
+<ul>
+<li>1 Router <code>CISCO2911/K9</code></li>
+<li>1 Switch (2960 or equivalent)</li>
+<li>1 Server-PT</li>
+<li>1 AccessPoint-PT</li>
+<li>At least 1 PC-PT and 1 Laptop-PT</li>
+</ul>
+
+<h3>1.2 Add WAN cloud</h3>
+<ul>
+<li>Place 1 <code>Cloud-PT</code> in center as Internet/WAN cloud.</li>
+<li>Open cloud <code>Physical</code> tab, power off cloud, insert serial modules (<code>PT-CLOUD-NM-1S</code>) so ports <code>Se0, Se1, Se2, Se3</code> are available, power on.</li>
+</ul>
+
+<h3>1.3 Add serial modules on routers</h3>
+<ul>
+<li>On each 2911 router, in <code>Physical</code>, power off, insert <code>HWIC-2T</code>, power on.</li>
+<li>Use <code>Serial0/1/0</code> as WAN interface.</li>
+</ul>
+
+<h2>2) Cable the Topology Exactly</h2>
+<table>
+<tr><th>Site</th><th>Users Switch Port</th><th>Server Port</th><th>AP Port</th><th>Cloud Port</th></tr>
+<tr><td>UDOM</td><td>Router Gi0/0 -> Switch</td><td>Router Gi0/1 -> Server path</td><td>Router Fa0/0/0 -> AP</td><td>Router Se0/1/0 -> Cloud Se0</td></tr>
+<tr><td>BUNGE</td><td>Router Gi0/0 -> Switch</td><td>Router Gi0/2 -> Server path</td><td>Router Fa0/0/0 -> AP</td><td>Router Se0/1/0 -> Cloud Se2</td></tr>
+<tr><td>MIPANGO</td><td>Router Gi0/2 -> Switch</td><td>Router Gi0/1 -> Server path</td><td>Router Fa0/0/0 -> AP</td><td>Router Se0/1/0 -> Cloud Se1</td></tr>
+<tr><td>CBE</td><td>Router Gi0/1 -> Switch</td><td>Router Gi0/0 -> Server path</td><td>Router Fa0/0/0 -> AP</td><td>Router Se0/1/0 -> Cloud Se3</td></tr>
+</table>
+
+<div class="warn"><b>Common mistake:</b> Server plugged into wrong Gig interface. If server LAN gateway is x.x.2.1, server must be connected behind that exact interface.</div>
+
+<h2>3) Configure Cloud Frame Relay (Critical)</h2>
+<h3>3.1 Open Cloud -> Config -> Connections -> Frame Relay</h3>
+<p>Create full-mesh sublinks between serial ports:</p>
+<ul>
+<li>Se0 <-> Se1</li>
+<li>Se0 <-> Se2</li>
+<li>Se0 <-> Se3</li>
+<li>Se1 <-> Se2</li>
+<li>Se1 <-> Se3</li>
+<li>Se2 <-> Se3</li>
+</ul>
+<p>If your cloud requires directional entries, add both directions for each pair.</p>
+
+<h3>3.2 Why this is needed</h3>
+<p>Without Frame Relay PVC pairs, serial interfaces may be up but routers will not pass traffic across WAN.</p>
+
+<div class="pagebreak"></div>
+<h2>4) Configure Routers (CLI Manual Commands)</h2>
+<p>You can paste pre-clean files from <code>CONFIGURATIONS/routers_clean/</code>, or enter manually below.</p>
+
+<h3>4.1 UDOM Router</h3>
+<pre>enable
+conf t
+hostname UDOM-ROUTER
+ip domain-lookup
+ip name-server 10.1.2.2
+ip host www.udom.ac.tz 10.1.2.2
+ip host www.bunge.gov.tz 10.2.2.2
+ip host www.mipango.ac.tz 10.3.2.2
+ip host www.cbe.ac.tz 10.4.2.2
+
+interface g0/0
+ ip address 10.1.1.1 255.255.255.0
+ no shut
+exit
+interface g0/1
+ ip address 10.1.2.1 255.255.255.0
+ no shut
+exit
+interface g0/2
+ no ip address
+ shut
+exit
+interface range fa0/0/0 - 3
+ switchport mode access
+ switchport access vlan 1
+ no shut
+exit
+interface vlan1
+ ip address 10.1.3.1 255.255.255.0
+ no shut
+exit
+interface s0/1/0
+ ip address 10.10.10.2 255.255.255.0
+ encapsulation frame-relay
+ no shut
+exit
+interface s0/1/1
+ shut
+exit
+
+ip dhcp excluded-address 10.1.1.1 10.1.1.20
+ip dhcp excluded-address 10.1.2.1 10.1.2.20
+ip dhcp excluded-address 10.1.3.1 10.1.3.20
+ip dhcp pool UDOM_LAN_USERS
+ network 10.1.1.0 255.255.255.0
+ default-router 10.1.1.1
+ dns-server 10.1.2.2
+exit
+ip dhcp pool UDOM_WIFI
+ network 10.1.3.0 255.255.255.0
+ default-router 10.1.3.1
+ dns-server 10.1.2.2
+exit
+
+ip route 10.2.1.0 255.255.255.0 10.10.10.3
+ip route 10.2.2.0 255.255.255.0 10.10.10.3
+ip route 10.2.3.0 255.255.255.0 10.10.10.3
+ip route 10.3.1.0 255.255.255.0 10.10.10.4
+ip route 10.3.2.0 255.255.255.0 10.10.10.4
+ip route 10.3.3.0 255.255.255.0 10.10.10.4
+ip route 10.4.1.0 255.255.255.0 10.10.10.5
+ip route 10.4.2.0 255.255.255.0 10.10.10.5
+ip route 10.4.3.0 255.255.255.0 10.10.10.5
+end
+wr</pre>
+
+<h3>4.2 BUNGE Router</h3>
+<pre>enable
+conf t
+hostname BUNGE-ROUTER
+ip domain-lookup
+ip name-server 10.2.2.2
+ip host www.udom.ac.tz 10.1.2.2
+ip host www.bunge.gov.tz 10.2.2.2
+ip host www.mipango.ac.tz 10.3.2.2
+ip host www.cbe.ac.tz 10.4.2.2
+
+interface g0/0
+ ip address 10.2.1.1 255.255.255.0
+ no shut
+exit
+interface g0/1
+ no ip address
+ shut
+exit
+interface g0/2
+ ip address 10.2.2.1 255.255.255.0
+ no shut
+exit
+interface range fa0/0/0 - 3
+ switchport mode access
+ switchport access vlan 1
+ no shut
+exit
+interface vlan1
+ ip address 10.2.3.1 255.255.255.0
+ no shut
+exit
+interface s0/1/0
+ ip address 10.10.10.3 255.255.255.0
+ encapsulation frame-relay
+ no shut
+exit
+interface s0/1/1
+ shut
+exit
+
+ip dhcp excluded-address 10.2.1.1 10.2.1.20
+ip dhcp excluded-address 10.2.2.1 10.2.2.20
+ip dhcp excluded-address 10.2.3.1 10.2.3.20
+ip dhcp pool BUNGE_LAN_USERS
+ network 10.2.1.0 255.255.255.0
+ default-router 10.2.1.1
+ dns-server 10.2.2.2
+exit
+ip dhcp pool BUNGE_WIFI
+ network 10.2.3.0 255.255.255.0
+ default-router 10.2.3.1
+ dns-server 10.2.2.2
+exit
+
+ip route 10.1.1.0 255.255.255.0 10.10.10.2
+ip route 10.1.2.0 255.255.255.0 10.10.10.2
+ip route 10.1.3.0 255.255.255.0 10.10.10.2
+ip route 10.3.1.0 255.255.255.0 10.10.10.4
+ip route 10.3.2.0 255.255.255.0 10.10.10.4
+ip route 10.3.3.0 255.255.255.0 10.10.10.4
+ip route 10.4.1.0 255.255.255.0 10.10.10.5
+ip route 10.4.2.0 255.255.255.0 10.10.10.5
+ip route 10.4.3.0 255.255.255.0 10.10.10.5
+end
+wr</pre>
+
+<div class="pagebreak"></div>
+<h3>4.3 MIPANGO Router</h3>
+<pre>enable
+conf t
+hostname MIPANGO-ROUTER
+ip domain-lookup
+ip name-server 10.3.2.2
+ip host www.udom.ac.tz 10.1.2.2
+ip host www.bunge.gov.tz 10.2.2.2
+ip host www.mipango.ac.tz 10.3.2.2
+ip host www.cbe.ac.tz 10.4.2.2
+
+interface g0/0
+ no ip address
+ shut
+exit
+interface g0/1
+ ip address 10.3.2.1 255.255.255.0
+ no shut
+exit
+interface g0/2
+ ip address 10.3.1.1 255.255.255.0
+ no shut
+exit
+interface range fa0/0/0 - 3
+ switchport mode access
+ switchport access vlan 1
+ no shut
+exit
+interface vlan1
+ ip address 10.3.3.1 255.255.255.0
+ no shut
+exit
+interface s0/1/0
+ ip address 10.10.10.4 255.255.255.0
+ encapsulation frame-relay
+ no shut
+exit
+interface s0/1/1
+ shut
+exit
+
+ip dhcp excluded-address 10.3.1.1 10.3.1.20
+ip dhcp excluded-address 10.3.2.1 10.3.2.20
+ip dhcp excluded-address 10.3.3.1 10.3.3.20
+ip dhcp pool MIPANGO_LAN_USERS
+ network 10.3.1.0 255.255.255.0
+ default-router 10.3.1.1
+ dns-server 10.3.2.2
+exit
+ip dhcp pool MIPANGO_WIFI
+ network 10.3.3.0 255.255.255.0
+ default-router 10.3.3.1
+ dns-server 10.3.2.2
+exit
+
+ip route 10.1.1.0 255.255.255.0 10.10.10.2
+ip route 10.1.2.0 255.255.255.0 10.10.10.2
+ip route 10.1.3.0 255.255.255.0 10.10.10.2
+ip route 10.2.1.0 255.255.255.0 10.10.10.3
+ip route 10.2.2.0 255.255.255.0 10.10.10.3
+ip route 10.2.3.0 255.255.255.0 10.10.10.3
+ip route 10.4.1.0 255.255.255.0 10.10.10.5
+ip route 10.4.2.0 255.255.255.0 10.10.10.5
+ip route 10.4.3.0 255.255.255.0 10.10.10.5
+end
+wr</pre>
+
+<h3>4.4 CBE Router</h3>
+<pre>enable
+conf t
+hostname CBE-ROUTER
+ip domain-lookup
+ip name-server 10.4.2.2
+ip host www.udom.ac.tz 10.1.2.2
+ip host www.bunge.gov.tz 10.2.2.2
+ip host www.mipango.ac.tz 10.3.2.2
+ip host www.cbe.ac.tz 10.4.2.2
+
+interface g0/0
+ ip address 10.4.2.1 255.255.255.0
+ no shut
+exit
+interface g0/1
+ ip address 10.4.1.1 255.255.255.0
+ no shut
+exit
+interface g0/2
+ no ip address
+ shut
+exit
+interface range fa0/0/0 - 3
+ switchport mode access
+ switchport access vlan 1
+ no shut
+exit
+interface vlan1
+ ip address 10.4.3.1 255.255.255.0
+ no shut
+exit
+interface s0/1/0
+ ip address 10.10.10.5 255.255.255.0
+ encapsulation frame-relay
+ no shut
+exit
+interface s0/1/1
+ shut
+exit
+
+ip dhcp excluded-address 10.4.1.1 10.4.1.20
+ip dhcp excluded-address 10.4.2.1 10.4.2.20
+ip dhcp excluded-address 10.4.3.1 10.4.3.20
+ip dhcp pool CBE_LAN_USERS
+ network 10.4.1.0 255.255.255.0
+ default-router 10.4.1.1
+ dns-server 10.4.2.2
+exit
+ip dhcp pool CBE_WIFI
+ network 10.4.3.0 255.255.255.0
+ default-router 10.4.3.1
+ dns-server 10.4.2.2
+exit
+
+ip route 10.1.1.0 255.255.255.0 10.10.10.2
+ip route 10.1.2.0 255.255.255.0 10.10.10.2
+ip route 10.1.3.0 255.255.255.0 10.10.10.2
+ip route 10.2.1.0 255.255.255.0 10.10.10.3
+ip route 10.2.2.0 255.255.255.0 10.10.10.3
+ip route 10.2.3.0 255.255.255.0 10.10.10.3
+ip route 10.3.1.0 255.255.255.0 10.10.10.4
+ip route 10.3.2.0 255.255.255.0 10.10.10.4
+ip route 10.3.3.0 255.255.255.0 10.10.10.4
+end
+wr</pre>
+
+<h2>5) Configure Each Server (DNS + HTTP)</h2>
+<h3>5.1 Desktop -> IP Configuration (Static)</h3>
+<table>
+<tr><th>Server</th><th>IP</th><th>Mask</th><th>Gateway</th><th>DNS</th></tr>
+<tr><td>UDOM</td><td>10.1.2.2</td><td>255.255.255.0</td><td>10.1.2.1</td><td>127.0.0.1</td></tr>
+<tr><td>BUNGE</td><td>10.2.2.2</td><td>255.255.255.0</td><td>10.2.2.1</td><td>127.0.0.1</td></tr>
+<tr><td>MIPANGO</td><td>10.3.2.2</td><td>255.255.255.0</td><td>10.3.2.1</td><td>127.0.0.1</td></tr>
+<tr><td>CBE</td><td>10.4.2.2</td><td>255.255.255.0</td><td>10.4.2.1</td><td>127.0.0.1</td></tr>
+</table>
+
+<h3>5.2 Services -> DNS (On)</h3>
+<p>On each server add all 4 A records:</p>
+<pre>www.udom.ac.tz    10.1.2.2
+www.bunge.gov.tz  10.2.2.2
+www.mipango.ac.tz 10.3.2.2
+www.cbe.ac.tz     10.4.2.2</pre>
+
+<h3>5.3 Services -> HTTP (On)</h3>
+<p>Edit <code>index.html</code> for each institution identity.</p>
+
+<div class="pagebreak"></div>
+<h2>6) Configure Access Points</h2>
+<ol>
+<li>Open AP -> Config -> Wireless.</li>
+<li>Set SSID (e.g., UDOM_WIFI, BUNGE_WIFI, MIPANGO_WIFI, CBE_WIFI).</li>
+<li>Security:
+  <ul>
+    <li>Testing: Open</li>
+    <li>Final demo: WPA2-PSK recommended</li>
+  </ul>
+</li>
+<li>AP management IP can be DHCP.</li>
+</ol>
+<p><b>Why AP DHCP initially fails in many labs:</b> AP is on Fa0/0/0 L2 port, but wireless gateway was wrongly configured on routed Gi interface instead of <code>Vlan1</code>.</p>
+
+<h2>7) Configure End Devices</h2>
+<ol>
+<li>On each PC/Laptop: Desktop -> IP Configuration -> DHCP.</li>
+<li>For wireless laptop: Desktop -> PC Wireless -> connect to site SSID.</li>
+<li>Confirm IP/GW/DNS assigned in correct subnet.</li>
+</ol>
+
+<h2>8) Verification Commands and Tests (Order Matters)</h2>
+<h3>8.1 Router layer checks</h3>
+<pre>show ip int brief
+show frame-relay pvc
+show ip route
+show ip dhcp binding
+show hosts</pre>
+
+<h3>8.2 WAN checks from UDOM router</h3>
+<pre>ping 10.10.10.3
+ping 10.10.10.4
+ping 10.10.10.5</pre>
+
+<h3>8.3 Inter-site server checks from UDOM router</h3>
+<pre>ping 10.2.2.2
+ping 10.3.2.2
+ping 10.4.2.2</pre>
+
+<h3>8.4 DNS + web checks from PCs (grading-critical)</h3>
+<pre>nslookup www.udom.ac.tz
+nslookup www.bunge.gov.tz
+nslookup www.mipango.ac.tz
+nslookup www.cbe.ac.tz</pre>
+<p>Open browser and access all four domains from at least one remote site each.</p>
+
+<h2>9) Quick Troubleshooting Flow</h2>
+<ol>
+<li>If WAN ping fails: check Cloud PVC pairs and serial interface <code>up/up</code>.</li>
+<li>If domain does not resolve: check DNS service ON and A records on server.</li>
+<li>If domain resolves but ping fails: routing or cabling mismatch.</li>
+<li>If local server unreachable from local router: server on wrong interface/subnet.</li>
+<li>If AP clients get no IP: verify <code>Vlan1</code> IP and WiFi DHCP pool.</li>
+</ol>
+
+<h2>10) Why Each Main Configuration Exists (Presentation-Ready)</h2>
+<table>
+<tr><th>Config Block</th><th>Why it exists</th></tr>
+<tr><td><code>interface Serial0/1/0 + frame-relay</code></td><td>WAN transport over Cloud-PT Frame Relay PVCs.</td></tr>
+<tr><td><code>ip route ...</code></td><td>Static inter-campus connectivity to all remote subnets.</td></tr>
+<tr><td><code>ip dhcp pool ...</code></td><td>Automatic host addressing for users and wireless clients.</td></tr>
+<tr><td><code>dns-server x.x.2.2</code> in DHCP</td><td>Clients use local site DNS server for all domain lookups.</td></tr>
+<tr><td><code>interface Vlan1</code></td><td>Wireless gateway on integrated switchport VLAN where AP is connected.</td></tr>
+<tr><td>Server static IP</td><td>Stable addressing for DNS records and web hosting.</td></tr>
+<tr><td>DNS A records on each server</td><td>Cross-site name resolution with local resilience.</td></tr>
+<tr><td>HTTP index pages</td><td>Demonstrates institutional website requirement.</td></tr>
+</table>
+
+<div class="pagebreak"></div>
+<h2>11) Viva / Presentation Question Bank (Practice)</h2>
+<ol>
+<li>Why did you use Frame Relay cloud PVCs instead of direct point-to-point links?</li>
+<li>Why does each site have three subnets?</li>
+<li>Why is AP traffic gatewayed on Vlan1 and not a routed Gi interface?</li>
+<li>How did you ensure no IP overlap across institutions?</li>
+<li>What is the advantage of using /24 per LAN here?</li>
+<li>Why do servers use static IP while clients use DHCP?</li>
+<li>How did you prove DNS works for remote domains?</li>
+<li>How did you prove web access from any LAN?</li>
+<li>How do you identify DNS issue vs routing issue quickly?</li>
+<li>How would you add a fifth institution?</li>
+<li>What are the scalability limits of static routing?</li>
+<li>What security improvements can be added for wireless?</li>
+<li>How can you verify cloud PVC status from router CLI?</li>
+<li>Why is consistent addressing important during troubleshooting?</li>
+<li>What assignment marks are covered by custom web pages?</li>
+</ol>
+
+<h2>12) Team Files to Use</h2>
+<ul>
+<li><code>CONFIGURATIONS/routers_clean/*.txt</code> for router CLI pasting.</li>
+<li><code>CONFIGURATIONS/servers/*.txt</code> for server click-by-click setup.</li>
+<li><code>CONFIGURATIONS/reference/CLOUD_FRAME_RELAY_PVC_TABLE.txt</code> for WAN cloud setup.</li>
+<li><code>CONFIGURATIONS/reference/AP_SETUP.txt</code> for AP setup.</li>
+</ul>
+
+<p class="small">End of step-by-step guide.</p>
+</body>
+</html>

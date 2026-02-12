@@ -1,0 +1,17 @@
+CLOUD-PT FRAME RELAY PVC TABLE (FULL MESH)
+Cloud serial port mapping in your topology:
+- Se0  -> UDOM Router Se0/1/0
+- Se2  -> BUNGE Router Se0/1/0
+- Se1  -> MIPANGO Router Se0/1/0
+- Se3  -> CBE Router Se0/1/0
+
+Required full-mesh pairs (6):
+1) Se0 (UDOM)    <-> Se1 (MIPANGO)
+2) Se0 (UDOM)    <-> Se2 (BUNGE)
+3) Se0 (UDOM)    <-> Se3 (CBE)
+4) Se1 (MIPANGO) <-> Se2 (BUNGE)
+5) Se1 (MIPANGO) <-> Se3 (CBE)
+6) Se2 (BUNGE)   <-> Se3 (CBE)
+
+If Cloud uses directional sublinks, ensure both directions exist for each pair.
+Expected result: show frame-relay pvc = ACTIVE on all routers.
