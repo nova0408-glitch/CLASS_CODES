@@ -32,6 +32,8 @@ int main() {
     // create an array or student list of the type student
     student studentList[n];
 
+
+    
     for (int i = 0; i < n; i++) {
         
         cout << "NAME: ";

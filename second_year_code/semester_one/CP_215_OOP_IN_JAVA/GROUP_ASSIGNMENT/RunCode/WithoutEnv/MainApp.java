@@ -5,9 +5,9 @@ import java.util.List;
 public class MainApp {
 
     static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/StudentData?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/StudentData";
     static final String USER = "root";
-    static final String PASS = "change_me";
+    static final String PASS = "------------------";
 
     public static void main(String[] args) {
         try {
@@ -59,8 +59,8 @@ public class MainApp {
             System.out.println("DB Product: " + meta.getDatabaseProductName());
             System.out.println("DB Version: " + meta.getDatabaseProductVersion());
             System.out.println("Driver Name: " + meta.getDriverName());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException error) {
+            error.printStackTrace();
         }
     }
 
