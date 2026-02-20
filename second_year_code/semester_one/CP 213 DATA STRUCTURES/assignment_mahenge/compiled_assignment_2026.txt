@@ -1,0 +1,34 @@
+                 CP 213 DATA STRUCTURES AND ALGORITHMS ANALYSIS
+                                FINAL GROUP ASSIGNMENT
+
+
+Discuss all questions. Prepare a hardcopy document for marking and a folder of programs for
+presentation.
+Question One
+  a. Using C++ write a code segment to implement a linked list of five nodes using integer
+     data type.
+  b. Show how the three first nodes of your linked list were linked.
+Question Two
+  a. Using C++ write a code to build a queue of five nodes of characters.
+  b. Show how the two three nodes of your queue are built and linked.
+Question Three
+  a. Using C++ write a code segment to implement a stack of five nodes of strings.
+  b. Using RAM diagrams show how data is and popping are carried out.
+Question Four
+  a. Using C++ write a code to implement a binary tree of integers for at least one level of
+     branching of characters.
+  b. Show how the first left-side node is created and how it gets its data.
+Question Five
+  a. Using C++ Write a code to traverse the tree in an post-order pattern.
+  b. Using RAM diagrams show how the traversal is accomplished.
+Question Six
+  a. Given an array of integers of size six. write a code segment to implement a bubble sort
+     algorithm on it.
+  b. RAM diagrams show how data is exchanged between variables.
+Question Seven
+  a. Write a code segment to implement a Quick Sort algorithm on an array size of 6.
+  b. Using RAM diagrams how the first partition is performed.
+Question Eight
+  a. Write a code segment to implement a Q-Sort algorithm on an array size of 6.
+  b. Using RAM diagrams how the first merge is performed.
+

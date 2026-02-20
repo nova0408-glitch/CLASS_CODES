@@ -1,0 +1,452 @@
+# Line-by-Line Guide - Assignment One
+
+This guide explains each **statement line** in each source file. Blank lines are formatting only.
+
+## `q1_linked_list.cpp`
+
+- `1`: Includes input/output stream tools.
+- `3`: Starts `Node` structure definition.
+- `4`: Integer payload for each node.
+- `5`: Pointer link to next node.
+- `7`: Constructor sets `data` and initializes `next` to null.
+- `8`: Ends `Node` struct.
+- `10`: Starts append function, takes head by reference.
+- `11`: Allocates a new node in heap memory.
+- `13`: Checks if list is empty.
+- `14`: Makes new node the head when list was empty.
+- `15`: Stops function after first insertion.
+- `18`: Temporary traversal pointer starts at head.
+- `19`: Loop until last node (`next == nullptr`).
+- `20`: Move to next node.
+- `22`: Link last node to newly created node.
+- `23`: Ends append function.
+- `25`: Starts list printing function.
+- `26`: Prints heading text.
+- `27`: Traversal pointer starts at head.
+- `28`: Loop through all nodes.
+- `29`: Prints node data.
+- `30`: Checks whether arrow should be shown.
+- `31`: Prints arrow between elements.
+- `33`: Moves pointer forward.
+- `35`: Ends output line.
+- `36`: Ends print function.
+- `38`: Starts function to show first 3 links.
+- `39`: Prints heading.
+- `41`: `first` points to head.
+- `42`: `second` points to first->next safely.
+- `43`: `third` points to second->next safely.
+- `45`: Starts printing first node address.
+- `46`: Prints first node data if node exists.
+- `47`: Prints first node `next` pointer value.
+- `49`: Starts printing second node address.
+- `50`: Prints second node data.
+- `51`: Prints second node `next` pointer.
+- `53`: Starts printing third node address.
+- `54`: Prints third node data.
+- `55`: Prints third node `next` pointer.
+- `56`: Ends link display function.
+- `58`: Starts memory cleanup function.
+- `59`: Repeats while head still exists.
+- `60`: Saves current head for deletion.
+- `61`: Advances head before deleting old node.
+- `62`: Frees old node memory.
+- `64`: Ends cleanup function.
+- `66`: Starts program entry point.
+- `67`: Empty list starts with null head.
+- `69`: Declares five integers for insertion.
+- `70`: Range loop over input values.
+- `71`: Appends each value to linked list.
+- `74`: Prints complete list.
+- `75`: Prints first-three-node link details.
+- `77`: Frees all dynamically allocated nodes.
+- `78`: Returns success code.
+- `79`: Ends `main`.
+
+## `q2_queue_char.cpp`
+
+- `1`: Includes stream I/O.
+- `3`: Starts queue node struct.
+- `4`: Character payload.
+- `5`: Pointer to next queue node.
+- `7`: Constructor assigns value and null link.
+- `8`: Ends node struct.
+- `10`: Starts queue class.
+- `11`: Private access section begins.
+- `12`: Pointer to front (dequeue end).
+- `13`: Pointer to rear (enqueue end).
+- `15`: Public access section begins.
+- `16`: Constructor initializes empty queue pointers.
+- `18`: Starts enqueue operation.
+- `19`: Creates new node in heap.
+- `21`: If queue is empty.
+- `22`: First node is both front and rear.
+- `23`: Return because insertion is complete.
+- `26`: Link current rear to new node.
+- `27`: Move rear to new node.
+- `28`: Ends enqueue.
+- `30`: Starts dequeue operation.
+- `31`: Empty queue check.
+- `32`: Dequeue fails when empty.
+- `35`: Save node to remove.
+- `36`: Move front to next node.
+- `38`: If queue became empty after removal.
+- `39`: Reset rear pointer to null too.
+- `42`: Release removed node memory.
+- `43`: Return success.
+- `44`: Ends dequeue.
+- `46`: Starts queue print function.
+- `47`: Prints heading.
+- `48`: Traversal pointer from front.
+- `49`: Loop through queue nodes.
+- `50`: Print character.
+- `51`: Check if arrow needed.
+- `52`: Print arrow between nodes.
+- `54`: Move traversal pointer.
+- `56`: End line.
+- `57`: Ends print function.
+- `59`: Starts first-three-nodes display.
+- `60`: Heading message.
+- `62`: First node is front.
+- `63`: Safe access second node.
+- `64`: Safe access third node.
+- `66`: Print first node address.
+- `67`: Print first node data.
+- `68`: Print first node next pointer.
+- `70`: Print second node address.
+- `71`: Print second node data.
+- `72`: Print second node next pointer.
+- `74`: Print third node address.
+- `75`: Print third node data.
+- `76`: Print third node next pointer.
+- `77`: Ends function.
+- `79`: Destructor starts.
+- `80`: Repeatedly dequeue to free all nodes.
+- `81`: Comment clarifies memory release.
+- `83`: Ends destructor.
+- `84`: Ends class.
+- `86`: Starts main.
+- `87`: Creates queue object.
+- `89`: Declares five characters.
+- `90`: Loops through char array.
+- `91`: Enqueue each char.
+- `94`: Prints queue content.
+- `95`: Shows first three links.
+- `97`: Returns success.
+- `98`: Ends main.
+
+## `q3_stack_string.cpp`
+
+- `1`: Includes stream I/O.
+- `2`: Includes string type.
+- `4`: Starts stack node struct.
+- `5`: Node stores one string.
+- `6`: Link to next lower node.
+- `8`: Constructor initializes value and null pointer.
+- `9`: Ends struct.
+- `11`: Starts stack class.
+- `12`: Private section begins.
+- `13`: Pointer to current top node.
+- `15`: Public section begins.
+- `16`: Constructor starts empty stack.
+- `18`: Starts push method.
+- `19`: Allocates new node.
+- `20`: New node points to old top.
+- `21`: Top pointer moved to new node.
+- `23`: Begins push trace output.
+- `24`: Prints new top address.
+- `25`: Prints where top->next points.
+- `26`: Ends push.
+- `28`: Starts pop method.
+- `29`: Empty check.
+- `30`: Pop fails if stack empty.
+- `33`: Save top node to delete.
+- `34`: Copy removed value for caller.
+- `35`: Move top to next node.
+- `37`: Begins pop trace output.
+- `38`: Prints removed node address.
+- `39`: Prints new top address.
+- `41`: Frees removed node.
+- `42`: Returns pop success.
+- `43`: Ends pop.
+- `45`: Starts stack print function.
+- `46`: Prints heading.
+- `47`: Traversal pointer begins at top.
+- `48`: Loop down stack.
+- `49`: Prints each string.
+- `50`: Checks for arrow formatting.
+- `51`: Prints arrow between nodes.
+- `53`: Advances pointer.
+- `55`: Ends output line.
+- `56`: Ends print function.
+- `58`: Starts silent cleanup helper.
+- `59`: Repeat while stack not empty.
+- `60`: Save top for deletion.
+- `61`: Advance top pointer.
+- `62`: Delete old top node.
+- `64`: Ends cleanup helper.
+- `66`: Destructor starts.
+- `67`: Calls silent cleanup.
+- `68`: Ends destructor.
+- `69`: Ends class.
+- `71`: Starts main.
+- `72`: Creates stack instance.
+- `74`: Declares five strings.
+- `75`: Continues initializer list.
+- `78`: Prints heading for build phase.
+- `79`: Loops through strings.
+- `80`: Pushes each string.
+- `83`: Prints full stack after pushes.
+- `85`: Prints heading for pop phase.
+- `86`: Variable to hold popped value.
+- `87`: Pops first item.
+- `88`: Pops second item.
+- `90`: Prints stack after pops.
+- `92`: Returns success.
+- `93`: Ends main.
+
+## `q4_binary_tree.cpp`
+
+- `1`: Includes stream I/O.
+- `3`: Starts tree node struct.
+- `4`: Integer payload.
+- `5`: Pointer to left child.
+- `6`: Pointer to right child.
+- `8`: Constructor sets data, null children.
+- `9`: Ends struct.
+- `11`: Starts in-order print function.
+- `12`: Base case for recursion.
+- `13`: Return when node is null.
+- `15`: Traverse left subtree.
+- `16`: Print current node data.
+- `17`: Traverse right subtree.
+- `18`: Ends print function.
+- `20`: Starts recursive tree cleanup.
+- `21`: Base case if node null.
+- `22`: Return immediately.
+- `24`: Free left subtree first.
+- `25`: Free right subtree.
+- `26`: Delete current node.
+- `27`: Ends cleanup.
+- `29`: Starts main.
+- `31`: Creates root node with value 50.
+- `34`: Creates first left-side node value 30.
+- `35`: Connects root left pointer to firstLeft.
+- `38`: Creates right child value 70.
+- `41`: Creates left-left grandchild value 20.
+- `42`: Creates left-right grandchild value 40.
+- `44`: Prints traversal heading.
+- `45`: Executes in-order traversal.
+- `46`: Prints spacing newline.
+- `48`: Prints heading for left-node explanation.
+- `49`: Prints root address and value.
+- `50`: Starts printing firstLeft address.
+- `51`: Prints firstLeft value.
+- `52`: Prints root->left pointer value.
+- `54`: Frees whole tree memory.
+- `55`: Returns success.
+- `56`: Ends main.
+
+## `q5_postorder_traversal.cpp`
+
+- `1`: Includes stream I/O.
+- `2`: Includes dynamic array (`vector`).
+- `4`: Starts tree node struct.
+- `5`: Node data value.
+- `6`: Left child pointer.
+- `7`: Right child pointer.
+- `9`: Constructor initializes node safely.
+- `10`: Ends struct.
+- `12`: Starts post-order recursive function.
+- `13`: Base case null check.
+- `14`: Return if no node.
+- `17`: Visit left subtree first.
+- `18`: Visit right subtree second.
+- `19`: Visit root last by storing data.
+- `20`: Ends post-order function.
+- `22`: Starts tree cleanup function.
+- `23`: Null check for cleanup.
+- `24`: Return if null.
+- `26`: Cleanup left subtree.
+- `27`: Cleanup right subtree.
+- `28`: Delete current node.
+- `29`: Ends cleanup.
+- `31`: Starts main.
+- `38`: Creates root node.
+- `39`: Creates left child.
+- `40`: Creates right child.
+- `41`: Creates left-left child.
+- `42`: Creates left-right child.
+- `43`: Creates right-left child.
+- `44`: Creates right-right child.
+- `46`: Vector to collect traversal output.
+- `47`: Executes post-order traversal.
+- `49`: Prints heading text.
+- `50`: Iterates over collected values.
+- `51`: Prints current value.
+- `52`: Checks whether arrow needed.
+- `53`: Prints arrow separator.
+- `56`: Ends line.
+- `58`: Frees allocated tree nodes.
+- `59`: Returns success.
+- `60`: Ends main.
+
+## `q6_bubble_sort.cpp`
+
+- `1`: Includes stream I/O.
+- `3`: Starts array print helper.
+- `4`: Loop through array indices.
+- `5`: Print each value.
+- `6`: If not last element.
+- `7`: Print space separator.
+- `10`: Print newline.
+- `11`: Ends print helper.
+- `13`: Starts bubble sort with trace logs.
+- `14`: Outer pass loop.
+- `15`: Prints current pass number.
+- `17`: Inner comparison loop (shrinks each pass).
+- `18`: Starts comparison message.
+- `19`: Finishes comparison message.
+- `21`: Swap condition when left > right.
+- `22`: Save left value in `temp`.
+- `23`: Move right value left.
+- `24`: Put temp value on right.
+- `26`: Print swap heading.
+- `27`: Print array after swap.
+- `30`: Print state after full pass.
+- `31`: Print current array.
+- `33`: Ends sort function.
+- `35`: Starts main.
+- `36`: Defines unsorted array of size 6.
+- `38`: Prints original heading.
+- `39`: Prints original values.
+- `41`: Runs bubble sort trace.
+- `43`: Prints sorted heading.
+- `44`: Prints sorted values.
+- `46`: Returns success.
+- `47`: Ends main.
+
+## `q7_quick_sort.cpp`
+
+- `1`: Includes stream I/O.
+- `3`: Starts print helper.
+- `4`: Loops through elements.
+- `5`: Prints each value.
+- `6`: Checks separator condition.
+- `7`: Prints space.
+- `10`: Prints newline.
+- `11`: Ends print helper.
+- `13`: Starts partition routine with optional trace.
+- `14`: Chooses pivot as last element.
+- `15`: Initializes boundary index `i`.
+- `17`: Prints heading if this is first traced partition.
+- `18`: Trace label.
+- `19`: Prints pivot details.
+- `22`: Iterates candidate index `j`.
+- `23`: Conditional trace for each check.
+- `24`: Starts check log line.
+- `25`: Completes check log line.
+- `28`: If element belongs to left partition.
+- `29`: Expand left partition boundary.
+- `30`: Save value for swap.
+- `31`: Place smaller value into left side.
+- `32`: Complete swap.
+- `34`: Trace swap only when enabled.
+- `35`: Starts swap trace print.
+- `36`: Prints array state after swap.
+- `41`: Prepare final pivot swap temp.
+- `42`: Move pivot into final slot.
+- `43`: Put displaced value at pivot old position.
+- `45`: Trace final pivot placement.
+- `46`: Print pivot final index message.
+- `47`: Print array after pivot placement.
+- `50`: Return partition index.
+- `51`: Ends partition function.
+- `53`: Starts recursive quick sort.
+- `54`: Continue only for valid subarray.
+- `55`: Enable trace only once.
+- `56`: Partition current subarray.
+- `57`: Mark first trace as completed.
+- `59`: Sort left side recursively.
+- `60`: Sort right side recursively.
+- `62`: Ends quickSort.
+- `64`: Starts main.
+- `65`: Defines unsorted array size 6.
+- `67`: Prints original heading.
+- `68`: Prints original array.
+- `70`: Controls one-time partition tracing.
+- `71`: Executes quick sort.
+- `73`: Prints sorted heading.
+- `74`: Prints sorted array.
+- `76`: Returns success.
+- `77`: Ends main.
+
+## `q8_merge_sort.cpp`
+
+- `1`: Includes stream I/O.
+- `3`: Starts print helper function.
+- `4`: Loops over array.
+- `5`: Prints one element.
+- `6`: Checks if separator needed.
+- `7`: Prints space separator.
+- `10`: Ends output line.
+- `11`: Ends print helper.
+- `13`: Starts merge function.
+- `14`: Computes left subarray size.
+- `15`: Computes right subarray size.
+- `17`: Allocates temporary left buffer.
+- `18`: Allocates temporary right buffer.
+- `20`: Loop to copy left half.
+- `21`: Copies element into left buffer.
+- `23`: Loop to copy right half.
+- `24`: Copies element into right buffer.
+- `27`: Runs only for first merge display.
+- `28`: Prints first-merge title.
+- `29`: Prints left label.
+- `30`: Loops left buffer.
+- `31`: Prints left values.
+- `33`: Prints right label.
+- `34`: Loops right buffer.
+- `35`: Prints right values.
+- `39`: Left buffer index.
+- `40`: Right buffer index.
+- `41`: Target array index.
+- `43`: Main merge loop.
+- `44`: Compare left and right candidate.
+- `45`: Write smaller left value.
+- `46`: Move left index.
+- `48`: Write smaller right value.
+- `49`: Move right index.
+- `51`: Move destination index.
+- `54`: Copy leftover left values.
+- `55`: Write remaining left item.
+- `56`: Increment left index.
+- `57`: Increment array index.
+- `60`: Copy leftover right values.
+- `61`: Write remaining right item.
+- `62`: Increment right index.
+- `63`: Increment array index.
+- `66`: First-merge final state block.
+- `67`: Prints post-merge heading.
+- `68`: Prints whole array.
+- `69`: Marks first merge as shown.
+- `72`: Frees left temp buffer.
+- `73`: Frees right temp buffer.
+- `74`: Ends merge function.
+- `76`: Starts merge sort recursion.
+- `77`: Base case for one element.
+- `78`: Returns at base case.
+- `81`: Computes safe midpoint.
+- `83`: Sort left half recursively.
+- `84`: Sort right half recursively.
+- `85`: Merge both sorted halves.
+- `86`: Ends mergeSort.
+- `88`: Starts main.
+- `89`: Defines array size 6.
+- `91`: Prints original label.
+- `92`: Prints original array.
+- `94`: Flag for first merge tracing.
+- `95`: Calls merge sort.
+- `97`: Prints sorted label.
+- `98`: Prints sorted array.
+- `100`: Returns success.
+- `101`: Ends main.

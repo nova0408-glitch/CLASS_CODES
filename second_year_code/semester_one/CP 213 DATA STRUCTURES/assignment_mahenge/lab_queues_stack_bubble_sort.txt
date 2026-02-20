@@ -1,0 +1,36 @@
+                                         LAB QUESTION
+
+A survey done at Chimwaga Pre and Primary School at Dodoma revealed that the lower limit of
+the age to join primary schools dropped by 2 years as compared to the survey done in last five
+years. A sample of ten pupils was used in a survey, where the surveys revealed that the youngest
+student aged 4 years and the eldest student aged 6 years. In the survey; surname, registration
+number, age, weight, and height were the information that was recorded.
+
+Write a program that can manipulate data of the student in a class. The surveyor should be
+enabled to increase or reduce the sample size of the study in refining or testing the study result.
+
+   a. Use the following concept to enter and display data on computer:
+         i. Structure
+        ii. Linked List
+       iii. Queue
+       iv. Stack
+   b. Add the section that allows the surveyor to add four student details. Consider that a
+      surveyor can add new pupil’s detail without regarding the distortion of the previous
+      arrangement. And add another section that will reduce the pupil’s information by
+      dropping six students from the sample. Display the remaining details.
+   c. Add the section that allows the surveyor to add five student details. Consider that a
+      surveyor should add new pupil’s detail without distorting the previous arrangement. All
+      new details should be added before the details of the first pupil. And add another section
+      that will reduce the pupil’s information by dropping six students from the sample.
+   d. Add the section that allows the surveyor to add three student details. Consider that a
+      surveyor should add new pupil’s detail without distorting the previous arrangement. All
+      new details should be added after the details of the last pupil. And add another section
+      that will reduce the pupil’s information by dropping six students from the sample.
+   e. During analysis phase; surveyor wanted to arrange student details from the youngest to
+      the eldest and vice versa. As a research assistant write a program with the following
+      subsection:
+         i. Accept the age details of students.
+        ii. Display the age details on the screen.
+       iii. Arrange the age from the youngest to the eldest. Display.
+       iv. Arrange the age from eldest to youngest pupil. Display.
+
